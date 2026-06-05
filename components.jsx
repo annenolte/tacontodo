@@ -120,6 +120,42 @@ function TalaveraBand({ height = 22 }) {
   return <div style={{ height, background: `url("data:image/svg+xml,${tile}")`, backgroundSize: `${height * 2.7}px` }} />;
 }
 
+// ---- Talavera tile fill: seamless ceramic-tile pattern in a named colorway ----
+const TILE_PALETTES = {
+  teal:   { bg: "#1F7A6E", line: "#8FD6CE", ring: "#F6B33D", dot: "#E8602C" },
+  red:    { bg: "#C8442C", line: "#F2E9DA", ring: "#F6B33D", dot: "#FFFCF6" },
+  orange: { bg: "#E8602C", line: "#FFE3CE", ring: "#F6B33D", dot: "#1F7A6E" },
+};
+function talaveraTileUri({ bg, line, ring, dot }) {
+  const svg =
+    `<svg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'>` +
+      `<rect width='72' height='72' fill='${bg}'/>` +
+      `<g fill='none' stroke='${line}' stroke-width='2.5'>` +
+        `<circle cx='0' cy='0' r='13'/><circle cx='72' cy='0' r='13'/>` +
+        `<circle cx='0' cy='72' r='13'/><circle cx='72' cy='72' r='13'/>` +
+      `</g>` +
+      `<g fill='${line}'>` +
+        `<circle cx='36' cy='0' r='3'/><circle cx='0' cy='36' r='3'/>` +
+        `<circle cx='72' cy='36' r='3'/><circle cx='36' cy='72' r='3'/>` +
+      `</g>` +
+      `<circle cx='36' cy='36' r='15' fill='none' stroke='${ring}' stroke-width='3'/>` +
+      `<g fill='${ring}'>` +
+        `<circle cx='36' cy='18' r='3.4'/><circle cx='36' cy='54' r='3.4'/>` +
+        `<circle cx='18' cy='36' r='3.4'/><circle cx='54' cy='36' r='3.4'/>` +
+      `</g>` +
+      `<circle cx='36' cy='36' r='6.5' fill='${dot}'/>` +
+    `</svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
+function TilePattern({ palette = "teal", height = 150, size = 72, radius = 0, style, children }) {
+  const p = typeof palette === "string" ? (TILE_PALETTES[palette] || TILE_PALETTES.teal) : palette;
+  return (
+    <div style={{ height, borderRadius: radius, background: talaveraTileUri(p), backgroundColor: p.bg, backgroundSize: `${size}px ${size}px`, ...style }}>
+      {children}
+    </div>
+  );
+}
+
 // ---- Sun mark + brand wordmark (inline SVG, no external assets) ----
 function SunMark({ size = 40 }) {
   return (
@@ -147,4 +183,4 @@ function LogoMark({ size = 44 }) {
   return <SunMark size={size} />;
 }
 
-Object.assign(window, { Icon, Button, Tag, FoodImage, TalaveraBand, Logo, LogoMark });
+Object.assign(window, { Icon, Button, Tag, FoodImage, TalaveraBand, TilePattern, Logo, LogoMark });

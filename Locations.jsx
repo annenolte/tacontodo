@@ -1,17 +1,17 @@
-/* global React, Icon, Button, FoodImage */
+/* global React, Icon, Button, TilePattern */
 // Ta'con Todo — Locations page
 
 const LOCATIONS = [
-  { city: "Albuquerque", area: "Nob Hill", addr: "3420 Central Ave SE", hours: "11am – 9pm", wait: "15 min", open: true, img: "assets/food/carne-asada.jpeg" },
-  { city: "Santa Fe", area: "Railyard", addr: "500 Market St", hours: "11am – 9pm", wait: "20 min", open: true, img: "assets/food/enchiladas-rojas.jpeg" },
-  { city: "Las Cruces", area: "Mesilla", addr: "2290 Calle de Parian", hours: "Opens 11am", wait: "Closed", open: false, img: "assets/food/pollo-asado.jpeg" },
+  { city: "Albuquerque", area: "Nob Hill", addr: "3420 Central Ave SE", hours: "11am – 9pm", wait: "15 min", open: true, tile: "teal" },
+  { city: "Santa Fe", area: "Railyard", addr: "500 Market St", hours: "11am – 9pm", wait: "20 min", open: true, tile: "red" },
+  { city: "Las Cruces", area: "Mesilla", addr: "2290 Calle de Parian", hours: "Opens 11am", wait: "Closed", open: false, tile: "orange" },
 ];
 
 function Locations() {
   return (
     <div style={{ background: "var(--paper)" }}>
       <div style={{ position: "relative" }}>
-        <FoodImage src="assets/food/burrito-mojado.jpeg" label="" height={220} radius={0} />
+        <TilePattern palette="teal" height={220} size={96} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(36,28,22,.1), rgba(36,28,22,.62))", display: "flex", alignItems: "flex-end" }}>
           <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px 28px", width: "100%" }}>
             <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--marigold-400)", marginBottom: 8 }}>Three spots across New Mexico</div>
@@ -22,7 +22,7 @@ function Locations() {
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "36px 24px 80px", display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 22 }}>
         {LOCATIONS.map((l) => (
           <div key={l.city} style={{ background: "#fff", borderRadius: 18, overflow: "hidden", boxShadow: "var(--shadow-md)", display: "flex", flexDirection: "column" }}>
-            <FoodImage src={l.img} label={l.city} height={150} />
+            <TilePattern palette={l.tile} height={150} />
             <div style={{ padding: "18px 20px", flex: 1, display: "flex", flexDirection: "column" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color: "var(--ink)", margin: 0 }}>{l.city}</h3>
