@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ta'con Todo — Order pickup</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);font-family:var(--font-body);color:var(--ink)}
+  button{font-family:var(--font-body)}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:var(--sand-300);border-radius:999px;border:2px solid var(--paper)}
+  @keyframes toastIn{from{opacity:0;transform:translateY(16px) translateX(-50%)}to{opacity:1;transform:translateY(0) translateX(-50%)}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+<script type="text/babel" src="components.jsx"></script>
+<script type="text/babel" src="chrome.jsx"></script>
+<script type="text/babel" src="Menu.jsx"></script>
+<script type="text/babel" src="Home.jsx"></script>
+<script type="text/babel" src="Drawers.jsx"></script>
+<script type="text/babel" src="Locations.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+function App() {
+  const [page, setPage] = useState("home");
+  const [cart, setCart] = useState([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [drawerItem, setDrawerItem] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [toast, setToast] = useState(null);
+
+  const cartCount = cart.reduce((s, c) => s + c.qty, 0);
+
+  const addToCart = (item, qty = 1) => {
+    setCart((prev) => {
+      const i = prev.findIndex((c) => c.id === item.id);
+      if (i >= 0) { const n = [...prev]; n[i] = { ...n[i], qty: n[i].qty + qty }; return n; }
+      return [...prev, { id: item.id, name: item.name, price: item.price, img: item.img, qty }];
+    });
+    setToast(`${item.name} added to your plate`);
+  };
+  useEffect(() => { if (toast) { const t = setTimeout(() => setToast(null), 2200); return () => clearTimeout(t); } }, [toast]);
+
+  const openItem = (item) => { setDrawerItem(item); setDrawerOpen(true); };
+  const nav = (p) => { setPage(p); window.scrollTo({ top: 0, behavior: "instant" }); };
+
+  return (
+    <div id="scrollroot">
+      <Header page={page} onNav={nav} cartCount={cartCount} onCart={() => setCartOpen(true)} />
+      {page === "home" && <Home onNav={nav} onAdd={addToCart} onOpen={openItem} />}
+      {page === "menu" && <MenuPage onAdd={addToCart} onOpen={openItem} />}
+      {page === "locations" && <Locations />}
+      <Footer onNav={nav} />
+
+      <ItemDrawer item={drawerItem} show={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={addToCart} />
+      <CartDrawer show={cartOpen} onClose={() => setCartOpen(false)} cart={cart} setCart={setCart} />
+
+      {toast && (
+        <div style={{ position: "fixed", bottom: 28, left: "50%", transform: "translateX(-50%)", zIndex: 200,
+          background: "var(--ink)", color: "#FFFCF6", padding: "13px 20px", borderRadius: 999,
+          boxShadow: "var(--shadow-pop)", display: "flex", alignItems: "center", gap: 10,
+          fontFamily: "var(--font-body)", fontSize: 15, fontWeight: 600, animation: "toastIn .28s var(--ease-out)" }}>
+          <span style={{ width: 22, height: 22, borderRadius: 999, background: "var(--hatch-green-500)", display: "grid", placeItems: "center" }}><Icon name="check" size={14} color="#fff" /></span>
+          {toast}
+          <button onClick={() => { setToast(null); setCartOpen(true); }} style={{ marginLeft: 6, background: "var(--primary)", color: "#fff", border: "none", borderRadius: 999, padding: "6px 14px", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>View plate</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
