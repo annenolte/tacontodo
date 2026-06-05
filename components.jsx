@@ -75,12 +75,13 @@ function Tag({ tone = "outline", children, style }) {
   return <span style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 700, padding: "4px 11px", borderRadius: 999, whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 5, ...TAG_STYLES[tone], ...style }}>{children}</span>;
 }
 
-// ---- Food image: real photo when `src` given, warm gradient fallback otherwise ----
+// ---- Food image: real photo when `src` given & loads, warm gradient fallback otherwise ----
 function FoodImage({ seed = 0, src, label = "photo", height = 150, radius = 0, style }) {
-  if (src) {
+  const [failed, setFailed] = useState(false);
+  if (src && !failed) {
     return (
       <div style={{ height, borderRadius: radius, overflow: "hidden", background: "var(--sand-100)", ...style }}>
-        <img src={src} alt={label} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+        <img src={src} alt={label} loading="lazy" onError={() => setFailed(true)} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
       </div>
     );
   }
@@ -105,17 +106,45 @@ function FoodImage({ seed = 0, src, label = "photo", height = 150, radius = 0, s
   );
 }
 
-// ---- Talavera band (thin decorative ribbon) ----
+// ---- Talavera band (thin decorative ribbon, inline tile pattern) ----
 function TalaveraBand({ height = 22 }) {
-  return <div style={{ height, background: "url(../../assets/pattern-talavera.svg)", backgroundSize: `${height * 3}px` }} />;
+  const tile = encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'>` +
+    `<rect width='60' height='60' fill='#1F7A6E'/>` +
+    `<circle cx='30' cy='30' r='11' fill='none' stroke='#F6B33D' stroke-width='3'/>` +
+    `<circle cx='30' cy='30' r='4' fill='#E8602C'/>` +
+    `<path d='M0 0h30v30H0z' fill='none' stroke='#8FD6CE' stroke-width='2'/>` +
+    `<path d='M30 30h30v30H30z' fill='none' stroke='#8FD6CE' stroke-width='2'/>` +
+    `</svg>`
+  );
+  return <div style={{ height, background: `url("data:image/svg+xml,${tile}")`, backgroundSize: `${height * 2.7}px` }} />;
 }
 
-// ---- Brand logo (inline, scalable) ----
+// ---- Sun mark + brand wordmark (inline SVG, no external assets) ----
+function SunMark({ size = 40 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 44 44" aria-hidden="true" style={{ display: "block", flex: "none" }}>
+      {Array.from({ length: 12 }).map((_, i) => (
+        <rect key={i} x="21" y="1.5" width="2" height="7" rx="1" fill="var(--marigold-400)"
+          transform={`rotate(${i * 30} 22 22)`} />
+      ))}
+      <circle cx="22" cy="22" r="11.5" fill="var(--primary)" />
+      <circle cx="22" cy="22" r="11.5" fill="none" stroke="var(--marigold-400)" strokeWidth="2" />
+    </svg>
+  );
+}
 function Logo({ height = 40, onDark = false }) {
-  return <img src="../../assets/logo-horizontal.svg" alt="Ta'con Todo" style={{ height, filter: onDark ? "brightness(0) invert(1)" : "none" }} />;
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: height * 0.22, height, lineHeight: 1 }}>
+      <SunMark size={height * 0.92} />
+      <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: height * 0.6, letterSpacing: "-.01em", whiteSpace: "nowrap", color: onDark ? "#FFFCF6" : "var(--ink)" }}>
+        Ta<span style={{ color: "var(--primary)" }}>’</span>con&nbsp;Todo
+      </span>
+    </span>
+  );
 }
 function LogoMark({ size = 44 }) {
-  return <img src="../../assets/logo-mark.svg" alt="Ta'con Todo" style={{ width: size, height: size }} />;
+  return <SunMark size={size} />;
 }
 
 Object.assign(window, { Icon, Button, Tag, FoodImage, TalaveraBand, Logo, LogoMark });

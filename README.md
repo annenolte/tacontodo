@@ -24,7 +24,7 @@ Open `index.html`. It boots a small single-page app with working state:
 | `Locations.jsx` | `Locations` — three NM storefront cards with open/closed status. |
 
 ## Notes & conventions
-- **Tokens:** everything reads from `../../colors_and_type.css`. No hard-coded brand hex.
+- **Tokens:** everything reads from `colors_and_type.css`. No hard-coded brand hex.
 - **Icons:** [Lucide](https://lucide.dev) via CDN, 2px stroke, `currentColor`. Brand marks (sun, Talavera) are bespoke SVG in `assets/`.
 - **Food imagery is a placeholder.** `FoodImage` renders a warm gradient tile labelled "photo".
   **Replace with real food photography** — swap the component body for an `<img>` (or an
