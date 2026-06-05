@@ -1,6 +1,38 @@
 /* global React, Icon, Button, Tag, FoodImage, MENU, TalaveraBand */
 // Ta'con Todo — Home page
 
+// Hero photo carousel — cross-fades through every menu dish (~10s each) with a captioned name.
+function HeroCarousel({ height = 420, interval = 10000 }) {
+  const [idx, setIdx] = React.useState(0);
+  React.useEffect(() => {
+    const t = setInterval(() => setIdx((i) => (i + 1) % MENU.length), interval);
+    return () => clearInterval(t);
+  }, [interval]);
+  return (
+    <div style={{ position: "relative", height, background: "var(--sand-100)" }}>
+      {MENU.map((m, i) => (
+        <img key={m.id} src={m.img} alt={m.name} loading={i === 0 ? "eager" : "lazy"}
+          style={{
+            position: "absolute", inset: 0, width: "100%", height: "100%",
+            objectFit: "cover", display: "block",
+            opacity: i === idx ? 1 : 0, transition: "opacity 900ms var(--ease-out)",
+          }} />
+      ))}
+      <div key={idx} style={{
+        position: "absolute", left: 16, top: 16, zIndex: 2, maxWidth: "calc(100% - 32px)",
+        display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 16px",
+        borderRadius: 999, background: "rgba(42,33,27,.72)", backdropFilter: "blur(6px)",
+        boxShadow: "var(--shadow-md)", animation: "heroCaptionIn .7s var(--ease-out)",
+      }}>
+        <span style={{ width: 7, height: 7, borderRadius: 999, background: "var(--marigold-400)", flex: "none" }} />
+        <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 16, color: "#FFFCF6", letterSpacing: "-.01em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+          {MENU[idx].name}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function Hero({ onNav }) {
   return (
     <section style={{ position: "relative", overflow: "hidden", background: "var(--paper)" }}>
@@ -27,7 +59,7 @@ function Hero({ onNav }) {
         </div>
         <div style={{ position: "relative" }}>
           <div style={{ borderRadius: 28, overflow: "hidden", boxShadow: "var(--shadow-pop)" }}>
-            <FoodImage src="assets/food/burrito-mojado.jpeg" label="Wet burrito with margarita" height={420} />
+            <HeroCarousel height={420} interval={10000} />
           </div>
           <div style={{ position: "absolute", left: -18, bottom: 28, background: "#fff", borderRadius: 16, boxShadow: "var(--shadow-lg)", padding: "14px 18px", display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ width: 44, height: 44, borderRadius: 12, background: "var(--hatch-green-500)", display: "grid", placeItems: "center" }}><Icon name="flame" size={22} color="#fff" /></div>
