@@ -27,7 +27,7 @@ function Hero({ onNav }) {
         </div>
         <div style={{ position: "relative" }}>
           <div style={{ borderRadius: 28, overflow: "hidden", boxShadow: "var(--shadow-pop)" }}>
-            <FoodImage src="../../assets/food/burrito-mojado.jpeg" label="Wet burrito with margarita" height={420} />
+            <FoodImage src="assets/food/burrito-mojado.jpeg" label="Wet burrito with margarita" height={420} />
           </div>
           <div style={{ position: "absolute", left: -18, bottom: 28, background: "#fff", borderRadius: 16, boxShadow: "var(--shadow-lg)", padding: "14px 18px", display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ width: 44, height: 44, borderRadius: 12, background: "var(--hatch-green-500)", display: "grid", placeItems: "center" }}><Icon name="flame" size={22} color="#fff" /></div>
@@ -112,7 +112,7 @@ function SpecialsBand() {
           </div>
         </div>
         <div style={{ borderRadius: 24, overflow: "hidden", boxShadow: "var(--shadow-pop)" }}>
-          <FoodImage src="../../assets/food/pozole.jpeg" label="Pozole rojo" height={320} />
+          <FoodImage src="assets/food/pozole.jpeg" label="Pozole rojo" height={320} />
         </div>
       </div>
     </section>

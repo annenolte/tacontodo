@@ -2,16 +2,16 @@
 // Ta'con Todo — Locations page
 
 const LOCATIONS = [
-  { city: "Albuquerque", area: "Nob Hill", addr: "3420 Central Ave SE", hours: "11am – 9pm", wait: "15 min", open: true, img: "../../assets/food/carne-asada.jpeg" },
-  { city: "Santa Fe", area: "Railyard", addr: "500 Market St", hours: "11am – 9pm", wait: "20 min", open: true, img: "../../assets/food/enchiladas-rojas.jpeg" },
-  { city: "Las Cruces", area: "Mesilla", addr: "2290 Calle de Parian", hours: "Opens 11am", wait: "Closed", open: false, img: "../../assets/food/pollo-asado.jpeg" },
+  { city: "Albuquerque", area: "Nob Hill", addr: "3420 Central Ave SE", hours: "11am – 9pm", wait: "15 min", open: true, img: "assets/food/carne-asada.jpeg" },
+  { city: "Santa Fe", area: "Railyard", addr: "500 Market St", hours: "11am – 9pm", wait: "20 min", open: true, img: "assets/food/enchiladas-rojas.jpeg" },
+  { city: "Las Cruces", area: "Mesilla", addr: "2290 Calle de Parian", hours: "Opens 11am", wait: "Closed", open: false, img: "assets/food/pollo-asado.jpeg" },
 ];
 
 function Locations() {
   return (
     <div style={{ background: "var(--paper)" }}>
       <div style={{ position: "relative" }}>
-        <FoodImage src="../../assets/food/burrito-mojado.jpeg" label="" height={220} radius={0} />
+        <FoodImage src="assets/food/burrito-mojado.jpeg" label="" height={220} radius={0} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(36,28,22,.1), rgba(36,28,22,.62))", display: "flex", alignItems: "flex-end" }}>
           <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px 28px", width: "100%" }}>
             <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--marigold-400)", marginBottom: 8 }}>Three spots across New Mexico</div>

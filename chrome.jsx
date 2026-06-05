@@ -1,7 +1,7 @@
 /* global React, Icon, Button, Tag, FoodImage, Logo, LogoMark, TalaveraBand */
 // Ta'con Todo — menu data + page chrome (Header, Footer)
 
-const IMG = (f) => `../../assets/food/${f}`;
+const IMG = (f) => `assets/food/${f}`;
 const MENU = [
   // ---------- Tacos & Bowls ----------
   { id: "pescado", cat: "Tacos & Bowls", name: "Pescado Baja", desc: "Two crispy beer-battered fish tacos, red-cabbage slaw, chipotle crema, pico, lime — with Spanish rice.", price: 13, tags: [["new", "New"]], img: IMG("pescado-baja.jpeg") },
