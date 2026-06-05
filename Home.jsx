@@ -33,6 +33,22 @@ function HeroCarousel({ height = 420, interval = 10000 }) {
   );
 }
 
+// 18-pointed decorative star — slowly-rotating backdrop behind the hero photo.
+function StarBurst({ size = 320, color = "#F8813B", points = 18, ratio = 0.74, style }) {
+  const c = 100, outer = 98, inner = outer * ratio;
+  let d = "";
+  for (let i = 0; i < points * 2; i++) {
+    const r = i % 2 === 0 ? outer : inner;
+    const a = (Math.PI / points) * i - Math.PI / 2;
+    d += (i === 0 ? "M" : "L") + (c + r * Math.cos(a)).toFixed(2) + " " + (c + r * Math.sin(a)).toFixed(2);
+  }
+  return (
+    <svg viewBox="0 0 200 200" width={size} height={size} aria-hidden="true" style={{ display: "block", ...style }}>
+      <path d={d + "Z"} fill={color} />
+    </svg>
+  );
+}
+
 function Hero({ onNav }) {
   return (
     <section style={{ position: "relative", overflow: "hidden", background: "var(--paper)" }}>
@@ -58,17 +74,19 @@ function Hero({ onNav }) {
           </div>
         </div>
         <div style={{ position: "relative" }}>
-          <div style={{ borderRadius: 28, overflow: "hidden", boxShadow: "var(--shadow-pop)" }}>
-            <HeroCarousel height={420} interval={10000} />
+          <StarBurst size={320} style={{ position: "absolute", top: -64, left: -30, zIndex: 0, animation: "heroSpin 55s linear infinite" }} />
+          <StarBurst size={380} style={{ position: "absolute", bottom: -80, right: -54, zIndex: 0, animation: "heroSpin 75s linear infinite reverse" }} />
+          <div style={{ position: "relative", zIndex: 1, borderRadius: 28, overflow: "hidden", boxShadow: "var(--shadow-pop)" }}>
+            <HeroCarousel height={420} interval={6000} />
           </div>
-          <div style={{ position: "absolute", left: -18, bottom: 28, background: "#fff", borderRadius: 16, boxShadow: "var(--shadow-lg)", padding: "14px 18px", display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ position: "absolute", left: -18, bottom: 28, zIndex: 2, background: "#fff", borderRadius: 16, boxShadow: "var(--shadow-lg)", padding: "14px 18px", display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ width: 44, height: 44, borderRadius: 12, background: "var(--hatch-green-500)", display: "grid", placeItems: "center" }}><Icon name="flame" size={22} color="#fff" /></div>
             <div>
               <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 17, color: "var(--ink)" }}>Roasted in-house</div>
               <div style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--ink-500)" }}>Hatch chile, every morning</div>
             </div>
           </div>
-          <div style={{ position: "absolute", right: -10, top: 24, background: "var(--ink)", color: "#fff", borderRadius: 14, padding: "10px 16px", transform: "rotate(4deg)", boxShadow: "var(--shadow-md)" }}>
+          <div style={{ position: "absolute", right: -10, top: 24, zIndex: 2, background: "var(--ink)", color: "#fff", borderRadius: 14, padding: "10px 16px", transform: "rotate(4deg)", boxShadow: "var(--shadow-md)" }}>
             <span style={{ fontFamily: "var(--font-hand)", fontWeight: 700, fontSize: 24, color: "var(--marigold-400)" }}>¡con todo!</span>
           </div>
         </div>
