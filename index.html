@@ -7,7 +7,8 @@
 <link rel="stylesheet" href="colors_and_type.css">
 <style>
   *{box-sizing:border-box}
-  html,body{margin:0;background:var(--paper);font-family:var(--font-body);color:var(--ink)}
+  html,body{margin:0;background:var(--paper);font-family:var(--font-body);color:var(--ink);overflow-x:hidden}
+  img{max-width:100%}
   button{font-family:var(--font-body)}
   ::-webkit-scrollbar{width:10px;height:10px}
   ::-webkit-scrollbar-thumb{background:var(--sand-300);border-radius:999px;border:2px solid var(--paper)}
@@ -70,6 +71,7 @@ function App() {
 
       {toast && (
         <div style={{ position: "fixed", bottom: 28, left: "50%", transform: "translateX(-50%)", zIndex: 200,
+          width: "max-content", maxWidth: "calc(100vw - 24px)",
           background: "var(--ink)", color: "#FFFCF6", padding: "13px 20px", borderRadius: 999,
           boxShadow: "var(--shadow-pop)", display: "flex", alignItems: "center", gap: 10,
           fontFamily: "var(--font-body)", fontSize: 15, fontWeight: 600, animation: "toastIn .28s var(--ease-out)" }}>

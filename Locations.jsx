@@ -1,4 +1,4 @@
-/* global React, Icon, Button, TilePattern */
+/* global React, Icon, Button, TilePattern, useIsMobile */
 // Ta'con Todo — Locations page
 
 const LOCATIONS = [
@@ -8,15 +8,16 @@ const LOCATIONS = [
 ];
 
 function Locations() {
+  const isMobile = useIsMobile(760);
   return (
     <div style={{ background: "var(--paper)" }}>
       <div style={{ background: "var(--sand-50)", borderBottom: "1px solid var(--border)" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "44px 24px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: isMobile ? "32px 20px" : "44px 24px" }}>
           <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--primary)", marginBottom: 8 }}>Three spots across New Mexico</div>
-          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 46, letterSpacing: "-.02em", color: "var(--ink)", margin: 0 }}>Find a spot</h1>
+          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: isMobile ? 32 : 46, letterSpacing: "-.02em", color: "var(--ink)", margin: 0 }}>Find a spot</h1>
         </div>
       </div>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "36px 24px 80px", display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 22 }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: isMobile ? "28px 20px 64px" : "36px 24px 80px", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3,1fr)", gap: 22 }}>
         {LOCATIONS.map((l) => (
           <div key={l.city} style={{ background: "#fff", borderRadius: 18, overflow: "hidden", boxShadow: "var(--shadow-md)", display: "flex", flexDirection: "column" }}>
             <TilePattern palette={l.tile} height={150} />

@@ -2,6 +2,20 @@
 // Ta'con Todo — shared UI kit primitives. Exports to window at end.
 const { useState, useEffect, useRef } = React;
 
+// ---- Responsive helper: true when viewport is at/below `bp` px ----
+// Inline styles can't use media queries, so components read this hook and
+// swap layout-critical values (grid columns, font sizes, paddings).
+function useIsMobile(bp = 760) {
+  const [m, setM] = useState(typeof window !== "undefined" && window.innerWidth <= bp);
+  useEffect(() => {
+    const onResize = () => setM(window.innerWidth <= bp);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [bp]);
+  return m;
+}
+
 // ---- Lucide icon (uses lucide UMD global, scans after mount) ----
 function Icon({ name, size = 20, color = "currentColor", stroke = 2, style }) {
   const ref = useRef(null);
@@ -183,4 +197,4 @@ function LogoMark({ size = 44 }) {
   return <SunMark size={size} />;
 }
 
-Object.assign(window, { Icon, Button, Tag, FoodImage, TalaveraBand, TilePattern, Logo, LogoMark });
+Object.assign(window, { Icon, Button, Tag, FoodImage, TalaveraBand, TilePattern, Logo, LogoMark, useIsMobile });

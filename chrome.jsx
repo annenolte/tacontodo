@@ -1,4 +1,4 @@
-/* global React, Icon, Button, Tag, FoodImage, Logo, LogoMark, TalaveraBand */
+/* global React, Icon, Button, Tag, FoodImage, Logo, LogoMark, TalaveraBand, useIsMobile */
 // Ta'con Todo — menu data + page chrome (Header, Footer)
 
 const IMG = (f) => `assets/food/${f}`;
@@ -30,43 +30,67 @@ const CATS = ["Tacos & Bowls", "Plates", "Burritos", "Postres"];
 // ---------- Header ----------
 function Header({ page, onNav, cartCount, onCart }) {
   const [scrolled, setScrolled] = React.useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const isMobile = useIsMobile(760);
   React.useEffect(() => {
     const root = document.getElementById("scrollroot") || window;
     const handler = () => setScrolled((root.scrollTop || window.scrollY) > 12);
     root.addEventListener("scroll", handler);
     return () => root.removeEventListener("scroll", handler);
   }, []);
+  React.useEffect(() => { if (!isMobile) setMenuOpen(false); }, [isMobile]);
   const links = [["Home", "home"], ["Menu", "menu"], ["Locations", "locations"]];
+  const go = (key) => { setMenuOpen(false); onNav(key); };
   return (
     <header style={{
       position: "sticky", top: 0, zIndex: 50,
-      background: scrolled ? "rgba(255,252,246,.82)" : "var(--paper)",
-      backdropFilter: scrolled ? "blur(10px)" : "none",
-      borderBottom: `1px solid ${scrolled ? "var(--border)" : "transparent"}`,
+      background: scrolled || menuOpen ? "rgba(255,252,246,.92)" : "var(--paper)",
+      backdropFilter: scrolled || menuOpen ? "blur(10px)" : "none",
+      borderBottom: `1px solid ${scrolled || menuOpen ? "var(--border)" : "transparent"}`,
       transition: "all var(--dur-mid) var(--ease-out)",
     }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "12px 24px", display: "flex", alignItems: "center", gap: 24 }}>
-        <button onClick={() => onNav("home")} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex" }}>
-          <Logo height={38} />
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: isMobile ? "10px 16px" : "12px 24px", display: "flex", alignItems: "center", gap: isMobile ? 12 : 24 }}>
+        <button onClick={() => go("home")} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex" }}>
+          <Logo height={isMobile ? 32 : 38} />
         </button>
-        <nav style={{ display: "flex", gap: 4, marginLeft: 12 }}>
-          {links.map(([label, key]) => (
-            <button key={key} onClick={() => onNav(key)} style={{
-              fontFamily: "var(--font-body)", fontSize: 15, fontWeight: 600, cursor: "pointer",
-              padding: "8px 14px", borderRadius: 8, border: "none", background: "transparent",
-              color: page === key ? "var(--primary)" : "var(--ink-700)",
-            }}>{label}</button>
-          ))}
-        </nav>
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
-          <button aria-label="Search" style={iconBtn}><Icon name="search" size={20} color="var(--ink-700)" /></button>
+        {!isMobile && (
+          <nav style={{ display: "flex", gap: 4, marginLeft: 12 }}>
+            {links.map(([label, key]) => (
+              <button key={key} onClick={() => onNav(key)} style={{
+                fontFamily: "var(--font-body)", fontSize: 15, fontWeight: 600, cursor: "pointer",
+                padding: "8px 14px", borderRadius: 8, border: "none", background: "transparent",
+                color: page === key ? "var(--primary)" : "var(--ink-700)",
+              }}>{label}</button>
+            ))}
+          </nav>
+        )}
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: isMobile ? 4 : 10 }}>
+          {!isMobile && <button aria-label="Search" style={iconBtn}><Icon name="search" size={20} color="var(--ink-700)" /></button>}
           <button aria-label="Cart" onClick={onCart} style={{ ...iconBtn, position: "relative" }}>
             <Icon name="shopping-bag" size={20} color="var(--ink-700)" />
             {cartCount > 0 && <span style={cartBadge}>{cartCount}</span>}
           </button>
-          <Button size="sm" icon="map-pin" onClick={() => onNav("locations")}>Order pickup</Button>
+          {!isMobile && <Button size="sm" icon="map-pin" onClick={() => onNav("locations")}>Order pickup</Button>}
+          {isMobile && (
+            <button aria-label="Menu" aria-expanded={menuOpen} onClick={() => setMenuOpen((o) => !o)} style={{ ...iconBtn, position: "relative" }}>
+              <Icon name={menuOpen ? "x" : "menu"} size={24} color="var(--ink-700)" />
+            </button>
+          )}
         </div>
       </div>
+      {isMobile && menuOpen && (
+        <nav style={{ borderTop: "1px solid var(--border)", padding: "8px 16px 16px", display: "flex", flexDirection: "column", gap: 4 }}>
+          {links.map(([label, key]) => (
+            <button key={key} onClick={() => go(key)} style={{
+              fontFamily: "var(--font-body)", fontSize: 17, fontWeight: 600, cursor: "pointer", textAlign: "left",
+              padding: "12px 12px", borderRadius: 10, border: "none",
+              background: page === key ? "var(--orange-50)" : "transparent",
+              color: page === key ? "var(--primary)" : "var(--ink-700)",
+            }}>{label}</button>
+          ))}
+          <Button size="lg" icon="map-pin" style={{ marginTop: 8 }} onClick={() => go("locations")}>Order pickup</Button>
+        </nav>
+      )}
     </header>
   );
 }
@@ -75,6 +99,7 @@ const cartBadge = { position: "absolute", top: 4, right: 4, minWidth: 17, height
 
 // ---------- Footer ----------
 function Footer({ onNav }) {
+  const isMobile = useIsMobile(760);
   const cols = [
     ["Menu", ["Tacos", "Plates", "Sides", "Drinks"]],
     ["Visit", ["Locations", "Hours", "Catering", "Order pickup"]],
@@ -83,8 +108,8 @@ function Footer({ onNav }) {
   return (
     <footer style={{ background: "var(--ink)", color: "#FFFCF6", marginTop: 0 }}>
       <TalaveraBand height={20} />
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "52px 24px 30px", display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1fr", gap: 32 }}>
-        <div>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: isMobile ? "40px 20px 26px" : "52px 24px 30px", display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "1.4fr 1fr 1fr 1fr", gap: isMobile ? 28 : 32 }}>
+        <div style={{ gridColumn: isMobile ? "1 / -1" : "auto" }}>
           <Logo height={40} onDark />
           <p style={{ fontFamily: "var(--font-body)", fontSize: 14, lineHeight: 1.6, color: "rgba(255,252,246,.7)", maxWidth: 240, marginTop: 14 }}>
             New Mexico on a plate. Red &amp; green chile roasted in-house, blue-corn tortillas pressed daily.
@@ -100,7 +125,7 @@ function Footer({ onNav }) {
           </div>
         ))}
       </div>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "18px 24px", borderTop: "1px solid rgba(255,252,246,.14)", display: "flex", justifyContent: "space-between", fontSize: 13, color: "rgba(255,252,246,.55)" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "18px 24px", borderTop: "1px solid rgba(255,252,246,.14)", display: "flex", flexDirection: isMobile ? "column" : "row", gap: isMobile ? 10 : 0, justifyContent: "space-between", fontSize: 13, color: "rgba(255,252,246,.55)" }}>
         <span>© 2026 Ta'con Todo · Albuquerque, NM</span>
         <span style={{ display: "flex", gap: 16 }}><a style={{ color: "inherit", textDecoration: "none" }}>Privacy</a><a style={{ color: "inherit", textDecoration: "none" }}>Terms</a></span>
       </div>

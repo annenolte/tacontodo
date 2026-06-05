@@ -1,4 +1,4 @@
-/* global React, Icon, Button, Tag, FoodImage, MENU, CATS */
+/* global React, Icon, Button, Tag, FoodImage, MENU, CATS, useIsMobile */
 // Ta'con Todo — Menu page + MenuCard
 
 function MenuCard({ item, onAdd, onOpen, compact }) {
@@ -37,19 +37,21 @@ function fmt(n) { return Number.isInteger(n) ? n : n.toFixed(2); }
 
 function MenuPage({ onAdd, onOpen }) {
   const [active, setActive] = React.useState("All");
+  const isMobile = useIsMobile(760);
   const tabs = ["All", ...CATS];
   const shown = active === "All" ? MENU : MENU.filter((m) => m.cat === active);
+  const grid = { display: "grid", gridTemplateColumns: isMobile ? "repeat(2,1fr)" : "repeat(3,1fr)", gap: isMobile ? 14 : 20 };
   return (
     <div style={{ background: "var(--paper)" }}>
       <div style={{ background: "var(--sand-50)", borderBottom: "1px solid var(--border)" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "44px 24px 0" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: isMobile ? "32px 20px 0" : "44px 24px 0" }}>
           <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--primary)", marginBottom: 8 }}>¡Provecho!</div>
-          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 46, letterSpacing: "-.02em", color: "var(--ink)", margin: "0 0 6px" }}>The menu</h1>
+          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: isMobile ? 32 : 46, letterSpacing: "-.02em", color: "var(--ink)", margin: "0 0 6px" }}>The menu</h1>
           <p style={{ fontFamily: "var(--font-body)", fontSize: 16, color: "var(--ink-500)", maxWidth: 520, margin: "0 0 22px" }}>Build your plate. Every taco comes con todo unless you tell us otherwise.</p>
-          <div style={{ display: "flex", gap: 6, overflowX: "auto" }}>
+          <div style={{ display: "flex", gap: 6, overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
             {tabs.map((t) => (
               <button key={t} onClick={() => setActive(t)} style={{
-                fontFamily: "var(--font-body)", fontSize: 15, fontWeight: 700, cursor: "pointer",
+                fontFamily: "var(--font-body)", fontSize: 15, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap",
                 padding: "11px 18px", border: "none", background: "transparent",
                 color: active === t ? "var(--primary)" : "var(--ink-500)",
                 borderBottom: `3px solid ${active === t ? "var(--primary)" : "transparent"}`,
@@ -59,18 +61,18 @@ function MenuPage({ onAdd, onOpen }) {
           </div>
         </div>
       </div>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px 24px 80px" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: isMobile ? "24px 20px 64px" : "32px 24px 80px" }}>
         {active === "All" ? CATS.map((c) => (
           <div key={c} style={{ marginBottom: 44 }}>
-            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 28, color: "var(--ink)", margin: "0 0 18px", display: "flex", alignItems: "center", gap: 12 }}>
+            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: isMobile ? 23 : 28, color: "var(--ink)", margin: "0 0 18px", display: "flex", alignItems: "center", gap: 12 }}>
               {c}<span style={{ flex: 1, height: 1, background: "var(--border)" }} />
             </h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }}>
+            <div style={grid}>
               {MENU.filter((m) => m.cat === c).map((m) => <MenuCard key={m.id} item={m} onAdd={onAdd} onOpen={onOpen} />)}
             </div>
           </div>
         )) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }}>
+          <div style={grid}>
             {shown.map((m) => <MenuCard key={m.id} item={m} onAdd={onAdd} onOpen={onOpen} />)}
           </div>
         )}
