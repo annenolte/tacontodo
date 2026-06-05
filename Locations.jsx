@@ -10,13 +10,10 @@ const LOCATIONS = [
 function Locations() {
   return (
     <div style={{ background: "var(--paper)" }}>
-      <div style={{ position: "relative" }}>
-        <TilePattern palette="teal" height={220} size={96} />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(36,28,22,.1), rgba(36,28,22,.62))", display: "flex", alignItems: "flex-end" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px 28px", width: "100%" }}>
-            <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--marigold-400)", marginBottom: 8 }}>Three spots across New Mexico</div>
-            <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 46, letterSpacing: "-.02em", color: "#FFFCF6", margin: 0 }}>Find a spot</h1>
-          </div>
+      <div style={{ background: "var(--sand-50)", borderBottom: "1px solid var(--border)" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "44px 24px" }}>
+          <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--primary)", marginBottom: 8 }}>Three spots across New Mexico</div>
+          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 46, letterSpacing: "-.02em", color: "var(--ink)", margin: 0 }}>Find a spot</h1>
         </div>
       </div>
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "36px 24px 80px", display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 22 }}>
